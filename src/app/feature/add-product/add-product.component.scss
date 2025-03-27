@@ -1,0 +1,12 @@
+label {
+  font-weight: 500;
+  margin: 10px;
+  padding: 10px;
+  display: inline-block;
+}
+input {
+  @apply border-solid;
+  @apply border-2;
+  @apply border-gray-300;
+  @apply rounded;
+}

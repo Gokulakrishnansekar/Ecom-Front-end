@@ -1,0 +1,23 @@
+<div class="flex justify-center items-center">
+  <div
+    class="cart flex max-w-80 flex-col m-10 gap-4"
+    *ngIf="product$ | async as product"
+  >
+    <img
+      *ngIf="product.imageData"
+      [src]="'data:image/jpeg;base64,' + product.imageData"
+      alt="product-image"
+    />
+    <div class="font-bold">{{ product.name }}</div>
+    <div class="font-semibold">{{ product.brand }}</div>
+    <hr class="border-black" />
+    <div>{{ "Prince in Rs :" + product.price }}</div>
+    <div>{{ product.description }}</div>
+
+    <div>Release date : {{ product.release_date | date }}</div>
+    <div class="flex justify-center gap-4">
+      <button class="btn">update</button>
+      <button class="btn" (click)="deleteProduct(product.id)">delete</button>
+    </div>
+  </div>
+</div>
