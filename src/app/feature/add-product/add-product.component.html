@@ -37,10 +37,24 @@
     <input type="date" name="pdate" [(ngModel)]="productModel.release_date" />
   </label>
 
+  <label for="preview"
+    >preview:
+    <img
+      [src]="'data:image/jpeg;base64,' + productModel.imageData"
+      class="max-w-md min-w-80 rounded-lg h-60"
+      alt="image"
+    />
+  </label>
+
   <label for="pimage"
     >image:
     <input type="file" name="pimage" (change)="fileUpload($event)" />
   </label>
 
-  <button class="btn" (click)="addProduct()">add product</button>
+  <button class="btn" *ngIf="!(id$ | async)" (click)="addProduct()">
+    add product
+  </button>
+  <button class="btn" *ngIf="id$ | async" (click)="updateProduct()">
+    update product
+  </button>
 </form>

@@ -7,11 +7,20 @@ import { AddProductComponent } from './feature/add-product/add-product.component
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
+    path: 'home',
     component: HomeComponent,
   },
   {
-    path: 'product/:id',
-    component: ProductComponent,
+    path: 'product',
+
+    children: [
+      { path: ':id', component: ProductComponent, pathMatch: 'full' },
+      { path: ':id/edit', component: AddProductComponent, pathMatch: 'full' },
+    ],
   },
   {
     path: 'addproduct',

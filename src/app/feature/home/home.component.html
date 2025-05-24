@@ -1,14 +1,14 @@
 <div class="flex flex-auto flex-wrap">
   <div
     *ngFor="let item of products$ | async"
-    class="flex flex-col border-solid border-2 border-gray-500 p-5 m-4 rounded-sm cursor-pointer hover:bg-gray-100"
+    class="flex flex-col p-5 m-4 rounded-md cursor-pointer hover:bg-gray-200 card bg-gray-100"
     [routerLink]="['/product', item.id]"
   >
-    <div>{{ item.name }}</div>
-    <img src="" alt="image" />
+    <img class="img" [src]="'data:image/jpeg;base64,' + item.imageData" />
+    <div class="text-center text-lg font-semibold">{{ item.name }}</div>
     <div class="flex gap-4 justify-between">
       <div>{{ item.price }}</div>
-      <button class="btn">add to cart</button>
+      <button class="btn" (click)="addTocard($event)">add to cart</button>
     </div>
   </div>
 </div>

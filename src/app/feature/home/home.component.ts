@@ -23,4 +23,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.products$.next(data);
       });
   }
+  addTocard(event: any): void {
+    event.stopPropagation();
+    console.log('add to card');
+  }
 }

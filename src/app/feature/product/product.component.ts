@@ -22,7 +22,7 @@ import { productModel } from 'src/app/model/product.model';
   styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent implements OnInit {
-  userId: number;
+  userId: number | null;
   subscription: Subscription;
   product$ = new BehaviorSubject<productModel>(new productModel());
   route: ActivatedRoute;
@@ -32,26 +32,24 @@ export class ProductComponent implements OnInit {
     private router: Router
   ) {
     this.route = route;
-    this.userId = route.snapshot.params['id'];
   }
   ngOnInit(): void {
-    this.subscription = this.productService
-      .getProductById(this.userId)
+    this.subscription = this.route.paramMap
       .pipe(
-        switchMap((product) => {
-          this.product$.next(product);
-          console.log(product);
-          return of(null);
-          // return this.productService.getImageById(product.id);
+        tap((params) => {
+          const id = params.get('id');
+          this.userId = id ? +id : null;
         }),
-        catchError((e) => {
-          return of(null);
+        switchMap(() => {
+          return this.productService.getProductById(this.userId!);
         })
       )
-      .subscribe((image: Blob | any | null) => {
-        if (image) console.log(image);
-        else console.log('error with image');
-      });
+      .subscribe((data) => this.product$.next(data));
+
+    // .subscribe((image: Blob | any | null) => {
+    //   if (image) console.log(image);
+    //   else console.log('error with image');
+    // };
   }
   deleteProduct(id: number) {
     this.productService
@@ -63,8 +61,11 @@ export class ProductComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error: (e) => {
-          window.alert(e);
+          window.alert(e.error.message);
         },
       });
+  }
+  updateProduct(id: number): void {
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
 }

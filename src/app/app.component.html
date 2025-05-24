@@ -7,14 +7,39 @@
     </div>
     <div class="flex gap-4 items-center">
       <div class="cursor-pointer">cart</div>
-      <input
-        type="text"
-        placeholder="product"
-        class="border-2 border-gray-300 p-1 rounded-lg"
-      />
-      <button type="button" class="border-spacing-2 px-0.5 border-b-gray-800">
-        search
-      </button>
+
+      <div class="relative wrapper" (blur)="isseachFocused = false">
+        <input
+          type="text"
+          placeholder="search product"
+          [formControl]="searchControl"
+          class="border-2 border-gray-300 p-1 rounded-lg"
+        />
+
+        <div
+          *ngIf="searchControl.value"
+          class="absolute top-10 bg-white border-2 rounded-lg w-48"
+        >
+          <ng-container *ngIf="searchedData.length">
+            <div
+              *ngFor="let data of searchedData"
+              class="p-1 cursor-pointer hover:bg-gray-100 flex gap-1"
+              (click)="navigateToProduct(data.id)"
+            >
+              <img
+                [src]="'data:image/jpeg;base64,' + data.imageData"
+                class="max-w-10 max-h-10 rounded-lg"
+              />
+
+              {{ data.name }}
+            </div>
+          </ng-container>
+
+          <div *ngIf="!searchedData.length" class="p-1 border-b-2">
+            no data found
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div>

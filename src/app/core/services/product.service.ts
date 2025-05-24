@@ -13,7 +13,7 @@ export class ProductService {
   getProducts(): Observable<productModel[]> {
     return this.http.get<productModel[]>(`${this.API_URL}/products`);
   }
-  getProductById(id: number): Observable<productModel> {
+  getProductById(id: number | null): Observable<productModel> {
     return this.http.get<productModel>(`${this.API_URL}/products/${id}`);
   }
 
@@ -21,7 +21,10 @@ export class ProductService {
     return this.http.get<Blob>(`${this.API_URL}/products/${id}/image`);
   }
 
-  saveProduct(product: productModel, image: File): Observable<productModel> {
+  saveProduct(
+    product: productModel,
+    image: File | string
+  ): Observable<productModel> {
     const formData = new FormData();
     formData.append(
       'product',
@@ -30,7 +33,23 @@ export class ProductService {
     formData.append('image', image);
     return this.http.post<productModel>(`${this.API_URL}/product`, formData);
   }
+
+  updateProduct(product: productModel, image: File): Observable<productModel> {
+    const formData = new FormData();
+    formData.append(
+      'product',
+      new Blob([JSON.stringify(product)], { type: 'application/json' })
+    );
+    formData.append('image', image);
+    return this.http.put<productModel>(`${this.API_URL}/product`, formData);
+  }
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/product/${id}`);
+  }
+
+  searchProduct(key: string | null) {
+    return this.http.get<productModel[]>(
+      `${this.API_URL}/products/search?key=${key}`
+    );
   }
 }
