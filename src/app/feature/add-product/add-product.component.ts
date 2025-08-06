@@ -1,31 +1,60 @@
+import { Location, NgIf, AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ProductService } from 'src/app/core/services/product.service';
-import { productModel } from 'src/app/model/product.model';
-
+import { ProductForm, productModel } from 'src/app/model/product.model';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { LayoutComponent } from '../../layout/layout/layout.component';
+import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { CATOGORY } from 'src/app/constants/catogory';
+import { NotificationService } from 'src/app/shared/notification.service';
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.scss'],
+  standalone: true,
+  imports: [
+    LayoutComponent,
+    FormsModule,
+    CommonModule,
+    MatCardModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+  ],
 })
 export class AddProductComponent implements OnInit {
-  productModel: productModel = new productModel();
+  productForm: FormGroup;
   productImage: File;
+  catagory = Object.values(CATOGORY);
   id$ = new BehaviorSubject<boolean>(false);
-
+  ctrnl = new FormControl('aer');
   constructor(
     private pservice: ProductService,
     private router: Router,
-    private aroute: ActivatedRoute
+    private aroute: ActivatedRoute,
+    private location: Location,
+    private fb: FormBuilder,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     const id = this.aroute.snapshot.params['id'];
     if (id) {
       this.pservice.getProductById(id).subscribe((product: productModel) => {
-        console.log(product);
-        this.productModel = product;
+        this.updateProductForm(product);
         this.productImage = this.base64ToFile(
           'data:image/jpeg;base64,' + product.imageData,
           product.name
@@ -33,34 +62,54 @@ export class AddProductComponent implements OnInit {
 
         this.id$.next(true);
       });
+    } else {
+      this.initiateProductForm();
     }
   }
+
+  updateProductForm(product: productModel) {
+    this.productForm = this.fb.group(
+      new ProductForm(new productModel(product))
+    );
+  }
+
+  initiateProductForm() {
+    this.productForm = this.fb.group(new ProductForm(new productModel()));
+  }
   addProduct(): void {
-    this.pservice.saveProduct(this.productModel, this.productImage).subscribe({
-      next: () => {
-        window.alert('Product added');
-        this.router.navigate(['/']);
-      },
-      error: (e) => {
-        console.log(e);
-        window.alert(e.error.message);
-      },
-    });
+    this.pservice
+      .saveProduct(this.productForm.value, this.productImage)
+      .subscribe({
+        next: () => {
+          this.notificationService.openSnackBar('Product Added successfully');
+
+          this.location.back();
+        },
+        error: (e) => {
+          this.notificationService.openSnackBar(e.error.message);
+        },
+      });
   }
 
   updateProduct(): void {
     this.pservice
-      .updateProduct(this.productModel, this.productImage)
+      .updateProduct(this.productForm.value, this.productImage)
       .subscribe({
         next: () => {
-          window.alert('Product updated');
-          this.router.navigate(['/']);
+          this.notificationService.openSnackBar('Product Updated successfully');
+          this.location.back();
         },
         error: (e) => {
-          console.log(e);
-          window.alert(e.error.message);
+          this.notificationService.openSnackBar(e.error.message);
         },
       });
+  }
+
+  get imageData() {
+    return this.productForm.get('imageData').value;
+  }
+  set imageData(data) {
+    this.productForm.get('imageData').setValue(data);
   }
 
   base64ToFile(base64: string, filename: string): File {
@@ -76,16 +125,14 @@ export class AddProductComponent implements OnInit {
   }
 
   fileUpload(event: any): void {
-    console.log(event.target.files[0]);
     this.productImage = event.target.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
-      console.log((e.target?.result as string).split(',')[1]);
-      this.productModel.imageData = (e.target?.result as string).split(',')[1];
+      this.productForm
+        .get('imageData')
+        .setValue((e.target?.result as string).split(',')[1]);
     };
 
     reader.readAsDataURL(event.target.files[0]);
-    //this.productModel.file = event.target.files[0];
-    // console.log(this.productModel.file, event.target.files[0]);
   }
 }

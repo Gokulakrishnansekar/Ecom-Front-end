@@ -1,0 +1,30 @@
+@tailwind utilities;
+
+.login-card {
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 5px rgb(230, 221, 221);
+  padding: 2rem;
+  // height: 500px;
+  width: 400px;
+}
+
+.seperator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  &::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid black;
+  }
+
+  &::before {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid black;
+  }
+}

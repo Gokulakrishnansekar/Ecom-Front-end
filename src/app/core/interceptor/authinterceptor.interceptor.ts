@@ -4,24 +4,53 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpHeaderResponse,
+  HttpErrorResponse,
+  HttpParams,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
+import { HttpHeader } from './model/auth.model';
+import { Route, Router } from '@angular/router';
+import { NotificationService } from 'src/app/shared/notification.service';
 
 @Injectable()
 export class AuthinterceptorInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(
+    private route: Router,
+    private notificationService: NotificationService
+  ) {}
 
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    if (request.headers && request.headers.has(HttpHeader.SKIP_INTERCEPTOR)) {
+      return next.handle(request);
+    }
+    let token: string = localStorage.getItem('token') as string;
+    token = token ? JSON.parse(token) : '';
+
     const clone = request.clone({
       setHeaders: {
-        Authorization: 'Basic Z29rdWw6YWJp',
-        Cookie: 'JSESSIONID=D3BE0FD3BDB315DCB0AF1CEE1C9432D9',
+        Authorization: `Bearer ${token}`,
       },
     });
-    console.log('intercepted', clone.headers);
-    return next.handle(clone);
+
+    return next.handle(clone).pipe(
+      catchError((e: HttpErrorResponse) => {
+        if (!e.status) {
+          this.notificationService.openSnackBar(
+            'Something went wrong, please try again later'
+          );
+
+          return throwError(() => e);
+        }
+        if (e.status == 401) {
+          localStorage.clear();
+          this.route.navigate(['/login']);
+        }
+        return throwError(() => e);
+      })
+    );
   }
 }

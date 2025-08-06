@@ -1,0 +1,48 @@
+<div class="flex items-center justify-center bg-gray-100 h-screen">
+  <div
+    class="login-card border-2 bg-white border-gray-300"
+    [formGroup]="userForm"
+  >
+    <div class="font-bold text-xl">Log In to Your Account</div>
+    <label id="name" class="flex py-4">
+      <input
+        class="border-2 border-gray-300 py-2 pl-2 rounded-lg w-full"
+        type="text"
+        id="name"
+        placeholder="enter your name"
+        formControlName="username"
+        name="name"
+        required
+      />
+    </label>
+    <label for="password" class="pb-4 flex">
+      <input
+        class="border-2 border-x-gray-300 pl-2 py-2 rounded-lg w-full"
+        type="password"
+        placeholder="password"
+        id="password"
+        formControlName="password"
+        name="name"
+        required
+      />
+    </label>
+
+    <a routerLink="/forgot-password" class="text-end cursor-pointer mb-4"
+      >forgot password?</a
+    >
+    <button
+      class="btn py-3 mb-4"
+      (click)="login()"
+      [disabled]="true"
+      [disabled]="userForm.invalid || userForm.pristine"
+    >
+      Log in
+    </button>
+    <div class="seperator py-3 mb-4">OR</div>
+    <div id="googleBtn" style="margin: auto"></div>
+
+    <span *ngIf="unAuthorized$?.value?.length" class="p-2 text-red-500">
+      {{ unAuthorized$ | async }}
+    </span>
+  </div>
+</div>

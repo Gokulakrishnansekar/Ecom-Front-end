@@ -1,0 +1,46 @@
+<div mat-dialog>
+  <div mat-dialog-title>Enter User Details To Add</div>
+  <div mat-dialog-content [formGroup]="userForm">
+    <mat-form-field class="w-full">
+      <mat-label>User Name</mat-label>
+
+      <input type="text" matInput formControlName="username" />
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Email</mat-label>
+      <input type="text" matInput formControlName="mail" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Roles</mat-label>
+      <mat-select formControlName="roles" multiple>
+        <mat-option *ngFor="let item of roles" [value]="item">
+          {{ item }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <mat-form-field class="w-full">
+      <mat-label>Roles</mat-label>
+      <mat-select formControlName="roles">
+        <mat-option
+          *ngFor="let item of ['select', 'tst', 'tes']"
+          [value]="item"
+        >
+          {{ item }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field> -->
+  </div>
+  <div mat-dialog-actions>
+    <button
+      mat-raised-button
+      [disabled]="userForm.invalid || userForm.pristine"
+      color="primary"
+      [mat-dialog-close]="userForm.value"
+    >
+      Register
+    </button>
+    <button mat-raised-button (click)="onClose()">Close</button>
+  </div>
+</div>

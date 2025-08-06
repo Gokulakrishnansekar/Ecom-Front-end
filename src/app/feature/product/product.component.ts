@@ -15,11 +15,17 @@ import {
 } from 'rxjs';
 import { ProductService } from 'src/app/core/services/product.service';
 import { productModel } from 'src/app/model/product.model';
+import { NgIf, AsyncPipe, DatePipe } from '@angular/common';
+import { LayoutComponent } from '../../layout/layout/layout.component';
+import { NotificationService } from 'src/app/shared/notification.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
+  standalone: true,
+  imports: [LayoutComponent, NgIf, AsyncPipe, DatePipe],
 })
 export class ProductComponent implements OnInit {
   userId: number | null;
@@ -29,7 +35,9 @@ export class ProductComponent implements OnInit {
   constructor(
     route: ActivatedRoute,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService,
+    public authService: AuthService
   ) {
     this.route = route;
   }
@@ -45,11 +53,6 @@ export class ProductComponent implements OnInit {
         })
       )
       .subscribe((data) => this.product$.next(data));
-
-    // .subscribe((image: Blob | any | null) => {
-    //   if (image) console.log(image);
-    //   else console.log('error with image');
-    // };
   }
   deleteProduct(id: number) {
     this.productService
@@ -57,7 +60,8 @@ export class ProductComponent implements OnInit {
       .pipe()
       .subscribe({
         next: () => {
-          window.alert('Product Deleted');
+          this.notificationService.openSnackBar('Product Deleted Successfully');
+
           this.router.navigate(['/']);
         },
         error: (e) => {

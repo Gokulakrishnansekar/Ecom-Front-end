@@ -10,3 +10,15 @@ input {
   @apply border-gray-300;
   @apply rounded;
 }
+
+mat-card {
+  width: 80%;
+  margin: 1rem auto;
+  padding: 1rem;
+}
+
+mat-card-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}

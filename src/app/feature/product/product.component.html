@@ -1,24 +1,33 @@
-<div class="flex justify-center items-center">
-  <div
-    class="cart flex flex-row m-10 gap-4 h-80"
-    *ngIf="product$ | async as product"
-  >
-    <img
-      [src]="'data:image/jpeg;base64,' + product.imageData"
-      class="max-w-md min-w-80 rounded-lg"
-    />
-    <div class="flex flex-col gap-4">
-      <div class="font-semibold text-lg">{{ product.name }}</div>
-      <div class="font-semibold">{{ product.brand }}</div>
-      <hr class="border-black" />
-      <div>{{ "Prince in Rs :" + product.price }}</div>
-      <div>{{ product.description }}</div>
+<app-layout>
+  <div class="flex justify-center items-center">
+    <div
+      class="cart flex flex-row m-10 gap-4 h-80"
+      *ngIf="product$ | async as product"
+    >
+      <img
+        [src]="'data:image/jpeg;base64,' + product.imageData"
+        class="max-w-md min-w-80 rounded-lg"
+      />
+      <div class="flex flex-col gap-4">
+        <div class="font-semibold text-lg">{{ product.name }}</div>
+        <div class="font-semibold">{{ product.brand }}</div>
+        <hr class="border-black" />
+        <div>{{ "Price :₹" + product.price }}</div>
+        <div>{{ product.description }}</div>
 
-      <div>Release date : {{ product.release_date | date }}</div>
-      <div class="flex justify-center gap-4">
-        <button class="btn" (click)="updateProduct(product.id)">update</button>
-        <button class="btn" (click)="deleteProduct(product.id)">delete</button>
+        <div>Release date : {{ product.release_date | date }}</div>
+        <div
+          class="flex justify-center gap-4"
+          *ngIf="authService.isSeller$ | async"
+        >
+          <button class="btn" (click)="updateProduct(product.id)">
+            update
+          </button>
+          <button class="btn" (click)="deleteProduct(product.id)">
+            delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</app-layout>

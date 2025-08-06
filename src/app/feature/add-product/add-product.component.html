@@ -1,60 +1,141 @@
-<form>
-  <label for="pname"
-    >product name:
-    <input type="text" name="pname" [(ngModel)]="productModel.name" />
-  </label>
-  <label for="pdes"
-    >product description:
-    <input type="text" name="pdes" [(ngModel)]="productModel.description" />
-  </label>
-  <label for="pprice"
-    >price:
-    <input type="number" name="pprice" [(ngModel)]="productModel.price" />
-  </label>
-  <label for="pbrand"
-    >brand name:
-    <input type="text" name="pbrand" [(ngModel)]="productModel.brand" />
-  </label>
-  <label for="pcat"
-    >category:
-    <input type="text" name="pcat" [(ngModel)]="productModel.category" />
-  </label>
-  <label for="pavail"
-    >available:
-    <input
-      type="checkbox"
-      name="pavail"
-      [(ngModel)]="productModel.is_available"
-    />
-  </label>
-  <label for="pstock"
-    >product in stock:
-    <input type="number" name="pstock" [(ngModel)]="productModel.in_stock" />
-  </label>
+<app-layout>
+  <!-- <form>
+    <label for="pname"
+      >product name:
+      <input type="text" name="pname" [(ngModel)]="productModel.name" />
+    </label>
+    <label for="pdes"
+      >product description:
+      <input type="text" name="pdes" [(ngModel)]="productModel.description" />
+    </label>
+    <label for="pprice"
+      >price:
+      <input type="number" name="pprice" [(ngModel)]="productModel.price" />
+    </label>
+    <label for="pbrand"
+      >brand name:
+      <input type="text" name="pbrand" [(ngModel)]="productModel.brand" />
+    </label>
+    <label for="pcat"
+      >category:
+      <input type="text" name="pcat" [(ngModel)]="productModel.category" />
+    </label>
+    <label for="pavail"
+      >available:
+      <input
+        type="checkbox"
+        name="pavail"
+        [(ngModel)]="productModel.is_available"
+      />
+    </label>
+    <label for="pstock"
+      >product in stock:
+      <input type="number" name="pstock" [(ngModel)]="productModel.in_stock" />
+    </label>
 
-  <label for="pdate"
-    >release date:
-    <input type="date" name="pdate" [(ngModel)]="productModel.release_date" />
-  </label>
+    <label for="pdate"
+      >release date:
+      <input type="date" name="pdate" [(ngModel)]="productModel.release_date" />
+    </label>
 
-  <label for="preview"
-    >preview:
-    <img
-      [src]="'data:image/jpeg;base64,' + productModel.imageData"
-      class="max-w-md min-w-80 rounded-lg h-60"
-      alt="image"
-    />
-  </label>
+    <label for="preview"
+      >preview:
+      <img
+        [src]="'data:image/jpeg;base64,' + productModel.imageData"
+        class="max-w-md min-w-80 rounded-lg h-60"
+        alt="image"
+      />
+    </label>
 
-  <label for="pimage"
-    >image:
-    <input type="file" name="pimage" (change)="fileUpload($event)" />
-  </label>
+    <label for="pimage"
+      >image:
+      <input type="file" name="pimage" (change)="fileUpload($event)" />
+    </label>
 
-  <button class="btn" *ngIf="!(id$ | async)" (click)="addProduct()">
-    add product
-  </button>
-  <button class="btn" *ngIf="id$ | async" (click)="updateProduct()">
-    update product
-  </button>
-</form>
+    <button class="btn" *ngIf="!(id$ | async)" (click)="addProduct()">
+      add product
+    </button>
+    <button class="btn" *ngIf="id$ | async" (click)="updateProduct()">
+      update product
+    </button>
+  </form> -->
+
+  <form [formGroup]="productForm" *ngIf="productForm">
+    <mat-card>
+      <mat-card-title> Product Details </mat-card-title>
+      <mat-card-content>
+        <mat-form-field>
+          <mat-label>Product Name</mat-label>
+          <input type="text" matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Product Description</mat-label>
+          <input type="text" matInput formControlName="description" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Product Price</mat-label>
+          <input matInput formControlName="price" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Product Brand</mat-label>
+          <input type="text" matInput formControlName="brand" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option *ngFor="let item of catagory" [value]="item">
+              {{ item }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Avilability</mat-label>
+
+          <mat-select formControlName="is_available">
+            <mat-option [value]="true"> Yes </mat-option>
+            <mat-option [value]="false"> No </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Stock Count</mat-label>
+          <input matInput formControlName="in_stock" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Release Date</mat-label>
+          <input type="date" matInput formControlName="release_date" />
+        </mat-form-field>
+        <img
+          *ngIf="imageData"
+          class="h-80 w-80"
+          [src]="'data:image/jpeg;base64,' + imageData"
+          mat-card-image
+          alt=""
+        />
+        <button mat-raised-button *ngIf="imageData" (click)="imageData = null">
+          Remove Image
+        </button>
+        <input *ngIf="!imageData" type="file" (change)="fileUpload($event)" />
+      </mat-card-content>
+      <mat-card-actions style="justify-content: end">
+        <button
+          mat-raised-button
+          color="primary"
+          *ngIf="!(id$ | async)"
+          [disabled]="productForm.invalid || productForm.pristine"
+          (click)="addProduct()"
+        >
+          add product
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="productForm.invalid || productForm.pristine"
+          *ngIf="id$ | async"
+          (click)="updateProduct()"
+        >
+          update product
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</app-layout>

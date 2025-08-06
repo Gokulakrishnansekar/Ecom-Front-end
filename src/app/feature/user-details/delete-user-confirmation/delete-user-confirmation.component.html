@@ -1,0 +1,12 @@
+<div mat-dialog>
+  <div mat-dialog-title>USER DELETION</div>
+  <div mat-dialog-content>
+    Are you sure to delete the user: <strong>{{ data.username }}</strong>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="warn" [mat-dialog-close]="data">
+      Confirm
+    </button>
+    <button mat-button (click)="onCancel()">Cancel</button>
+  </div>
+</div>

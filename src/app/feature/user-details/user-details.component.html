@@ -1,0 +1,41 @@
+<app-layout>
+  <div style="margin-top: 3rem; padding: 1rem">
+    <button
+      class="addUser"
+      mat-raised-button
+      color="primary"
+      (click)="addUser()"
+    >
+      Add User
+    </button>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef>User Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Mail">
+        <th mat-header-cell *matHeaderCellDef>Mail</th>
+        <td mat-cell *matCellDef="let element">{{ element.mail }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Role">
+        <th mat-header-cell *matHeaderCellDef>Roles</th>
+        <td mat-cell *matCellDef="let element">{{ element.roles }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element">
+          <button (click)="deleteConfirmation(element)">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Delete user"
+              fontIcon="delete"
+            ></mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</app-layout>

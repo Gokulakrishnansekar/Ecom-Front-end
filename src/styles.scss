@@ -10,5 +10,13 @@
 
   &:hover {
     @apply bg-blue-700;
+    cursor: pointer;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    @apply bg-blue-300;
   }
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

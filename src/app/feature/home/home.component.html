@@ -1,14 +1,21 @@
-<div class="flex flex-auto flex-wrap">
-  <div
-    *ngFor="let item of products$ | async"
-    class="flex flex-col p-5 m-4 rounded-md cursor-pointer hover:bg-gray-200 card bg-gray-100"
-    [routerLink]="['/product', item.id]"
-  >
-    <img class="img" [src]="'data:image/jpeg;base64,' + item.imageData" />
-    <div class="text-center text-lg font-semibold">{{ item.name }}</div>
-    <div class="flex gap-4 justify-between">
-      <div>{{ item.price }}</div>
-      <button class="btn" (click)="addTocard($event)">add to cart</button>
+<app-layout>
+  <div class="flex flex-auto flex-wrap">
+    <div
+      *ngFor="let item of products$ | async"
+      class="flex flex-col p-5 m-4 rounded-md cursor-pointer hover:bg-gray-200 card bg-gray-100"
+      [routerLink]="['/product', item.id]"
+    >
+      <img class="img" [src]="'data:image/jpeg;base64,' + item.imageData" />
+      <div class="text-center text-lg font-semibold">{{ item.name }}</div>
+      <div class="flex flex-col gap-4 justify-between">
+        <div>₹{{ item.price }}</div>
+        <div>
+          M.R.P: ₹<span class="line-through">{{
+            item.price + item.price / 10
+          }}</span>
+        </div>
+        <button class="btn" (click)="addTocard($event)">add to cart</button>
+      </div>
     </div>
   </div>
-</div>
+</app-layout>
