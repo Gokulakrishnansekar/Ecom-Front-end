@@ -1,27 +1,51 @@
-# Ecom
+# E-Commerce Platform
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.0.
+## Overview
+This is a full-stack e-commerce application built with **Angular** (frontend) and **Spring Boot** (backend). The application currently supports:
 
-## Development server
+- User Authentication & Authorization
+- Product Listing (View)
+- Product Management (Add, Update, Delete)
+- User Management
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+The project aims to provide a scalable and secure online shopping platform. The next planned feature is the implementation of the **shopping cart** functionality.
 
-## Code scaffolding
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Features Implemented
+- **Authentication & Authorization:** Secure login, registration, role-based access control.
+- **Product Management:** Admins can add, update, delete products; users can view product listings.
+- **User Management:** Admins can manage user profiles and roles.
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Technology Stack
+- Frontend: Angular
+- Backend: Spring Boot
+- Database: (Specify your database here, e.g., MySQL, PostgreSQL, MongoDB)
+- Security: JWT (JSON Web Tokens) for authentication and authorization
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Getting Started
 
-## Running end-to-end tests
+### Prerequisites
+- Java 11+
+- Node.js and npm
+- Angular CLI
+- Database setup (configure connection in backend `application.properties`)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Installation
 
-## Further help
+1. **Backend**
+   ```bash
+   cd backend
+   ./mvnw spring-boot:run
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+   
+1. **Frontend**
+   ```bash
+   cd frontedn
+   npm install
+   ng serve
+   
