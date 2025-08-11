@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Input,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,16 +17,24 @@ import { productModel } from 'src/app/model/product.model';
 import { ChangepasswordComponent } from 'src/app/shared/changepassword/changepassword.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatProgressBarModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutComponent {
+  @Input() showLoader;
   searchedData$ = new BehaviorSubject<productModel[]>([]);
   isseachFocused: boolean = false;
   isProfileClicked: boolean = false;

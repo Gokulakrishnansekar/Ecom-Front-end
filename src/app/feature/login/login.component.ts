@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -11,16 +11,24 @@ import {
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { LoginService } from 'src/app/core/services/login.service';
 import { LoginModel } from 'src/app/model/login.model';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { NgIf, AsyncPipe, CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { RouterLink } from '@angular/router';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 declare var google: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgIf, AsyncPipe, RouterLink],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    AsyncPipe,
+    RouterLink,
+    CommonModule,
+    MatProgressBarModule,
+  ],
 })
 export class LoginComponent implements OnInit {
   constructor(
@@ -31,6 +39,7 @@ export class LoginComponent implements OnInit {
   ) {}
   userForm: FormGroup;
   private auth2: any; // Declare auth2 variable to hold Google Auth instance
+  showLoader = false;
 
   unAuthorized$ = new BehaviorSubject<string>('');
 
@@ -56,34 +65,37 @@ export class LoginComponent implements OnInit {
   }
 
   handleCredentialResponse(response: any) {
+    this.showLoader = true;
     this.loginService
       .loginBySSO(response.credential)
       .pipe(
         catchError((e) => {
           this.unAuthorized$.next('Invalid Username or Password');
           this.userForm = this.fb.group(new userForm(new LoginModel()));
+          this.showLoader = false;
           return throwError(() => e);
         })
       )
       .subscribe((token: any) => {
+        this.showLoader = false;
         this.authSerive.authDate = token;
       });
   }
 
   login() {
-    this.loginService.dummyUser().subscribe((data) => {
-      console.log(data);
-    });
+    this.showLoader = true;
     this.loginService
       .loginUser(this.userForm.value)
       .pipe(
         catchError((e) => {
           this.unAuthorized$.next('Invalid Username or Password');
           this.userForm = this.fb.group(new userForm(new LoginModel()));
+          this.showLoader = false;
           return throwError(() => e);
         })
       )
       .subscribe((token: any) => {
+        this.showLoader = false;
         this.authSerive.authDate = token;
       });
   }

@@ -103,3 +103,6 @@
     <ng-content></ng-content>
   </div>
 </div>
+<div class="backdrop" [ngClass]="{ show: showLoader }">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>

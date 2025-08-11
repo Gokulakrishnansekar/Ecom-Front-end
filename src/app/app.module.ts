@@ -24,6 +24,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AddUserDialogComponent } from './feature/user-details/add-user-dialog/add-user-dialog.component';
 import { DeleteUserConfirmationComponent } from './feature/user-details/delete-user-confirmation/delete-user-confirmation.component';
 import { UrlService } from './core/services/URL.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 export function loadConfig(http: HttpClient, url: UrlService) {
   return () =>
     http

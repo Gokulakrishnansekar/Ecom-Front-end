@@ -36,6 +36,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
   ],
 })
 export class AddProductComponent implements OnInit {
+  showLoader = false;
   productForm: FormGroup;
   productImage: File;
   catagory = Object.values(CATOGORY);
@@ -53,6 +54,8 @@ export class AddProductComponent implements OnInit {
   ngOnInit(): void {
     const id = this.aroute.snapshot.params['id'];
     if (id) {
+      this.showLoader = true;
+
       this.pservice.getProductById(id).subscribe((product: productModel) => {
         this.updateProductForm(product);
         this.productImage = this.base64ToFile(
@@ -61,6 +64,7 @@ export class AddProductComponent implements OnInit {
         );
 
         this.id$.next(true);
+        this.showLoader = false;
       });
     } else {
       this.initiateProductForm();
@@ -77,10 +81,12 @@ export class AddProductComponent implements OnInit {
     this.productForm = this.fb.group(new ProductForm(new productModel()));
   }
   addProduct(): void {
+    this.showLoader = true;
     this.pservice
       .saveProduct(this.productForm.value, this.productImage)
       .subscribe({
         next: () => {
+          this.showLoader = false;
           this.notificationService.openSnackBar('Product Added successfully');
 
           this.location.back();
@@ -92,11 +98,13 @@ export class AddProductComponent implements OnInit {
   }
 
   updateProduct(): void {
+    this.showLoader = true;
     this.pservice
       .updateProduct(this.productForm.value, this.productImage)
       .subscribe({
         next: () => {
           this.notificationService.openSnackBar('Product Updated successfully');
+          this.showLoader = false;
           this.location.back();
         },
         error: (e) => {

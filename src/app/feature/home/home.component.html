@@ -1,4 +1,4 @@
-<app-layout>
+<app-layout [showLoader]="showLoader">
   <div class="flex flex-auto flex-wrap">
     <div
       *ngFor="let item of products$ | async"
