@@ -71,6 +71,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.loginService.dummyUser().subscribe((data) => {
+      console.log(data);
+    });
     this.loginService
       .loginUser(this.userForm.value)
       .pipe(
