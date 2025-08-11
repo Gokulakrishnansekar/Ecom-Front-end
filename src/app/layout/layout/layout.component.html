@@ -44,10 +44,11 @@
         <div
           *ngIf="searchControl.value && isseachFocused"
           class="absolute top-10 bg-white border-2 rounded-lg w-48"
+          style="z-index: 1000"
         >
-          <ng-container *ngIf="searchedData.length">
+          <ng-container *ngIf="(searchedData$ | async).length">
             <div
-              *ngFor="let data of searchedData"
+              *ngFor="let data of searchedData$ | async"
               class="p-1 cursor-pointer hover:bg-gray-100 flex gap-1"
               (mousedown)="navigateToProduct(data.id)"
             >
@@ -60,8 +61,8 @@
             </div>
           </ng-container>
 
-          <div *ngIf="!searchedData.length" class="p-1 border-b-2">
-            no data found
+          <div *ngIf="!(searchedData$ | async).length" class="p-1 border-b-2">
+            no data found {{ searchedData$ | async }}
           </div>
         </div>
       </div>
@@ -74,12 +75,13 @@
         <mat-icon
           alt="profile"
           class="max-w-8 max-h-8 rounded-lg hover:cursor-pointer"
-          (click)="isProfileClicked = !isProfileClicked"
+          (click)="isProfileClicked = !isProfileClicked; cdr.detectChanges()"
           >account_circle</mat-icon
         >
         <div
           *ngIf="isProfileClicked"
-          class="absolute top-10 bg-white border-2 rounded-lg -left-20 z-50"
+          class="absolute top-10 bg-white border-2 rounded-lg -left-20"
+          style="z-index: 1000"
         >
           <div
             class="p-2 cursor-pointer hover:bg-gray-100 flex gap-1"

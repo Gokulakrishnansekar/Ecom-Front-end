@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterModule } from '@angular/router';
-import {
-  catchError,
-  distinctUntilChanged,
-  of,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { ProductService } from 'src/app/core/services/product.service';
@@ -25,9 +23,10 @@ import { NotificationService } from 'src/app/shared/notification.service';
   styleUrls: ['./layout.component.scss'],
   standalone: true,
   imports: [CommonModule, RouterModule, MatIconModule, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutComponent {
-  searchedData: productModel[] = [];
+  searchedData$ = new BehaviorSubject<productModel[]>([]);
   isseachFocused: boolean = false;
   isProfileClicked: boolean = false;
   searchControl = new FormControl('');
@@ -37,7 +36,8 @@ export class LayoutComponent {
     private dialog: MatDialog,
     public authService: AuthService,
     private loginSerive: LoginService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public cdr: ChangeDetectorRef
   ) {
     this.authService.loadToken();
   }
@@ -45,13 +45,13 @@ export class LayoutComponent {
   ngOnInit(): void {
     this.searchControl.valueChanges
       .pipe(
-        distinctUntilChanged(),
         switchMap((value: string | null) => {
           return this.productService.searchProduct(value);
         })
       )
       .subscribe((data: any) => {
-        this.searchedData = data;
+        this.searchedData$.next(data);
+        this.cdr.detectChanges();
       });
   }
   navigateToProduct(productId: number) {
