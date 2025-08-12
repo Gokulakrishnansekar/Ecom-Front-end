@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
+  HostListener,
   Input,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -35,8 +37,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 })
 export class LayoutComponent {
   @Input() showLoader;
+  isMenuOpen = false;
   searchedData$ = new BehaviorSubject<productModel[]>([]);
-  isseachFocused: boolean = false;
+  issearchFocused: boolean = false;
   isProfileClicked: boolean = false;
   searchControl = new FormControl('');
   constructor(
@@ -46,7 +49,8 @@ export class LayoutComponent {
     public authService: AuthService,
     private loginSerive: LoginService,
     private notificationService: NotificationService,
-    public cdr: ChangeDetectorRef
+    public cdr: ChangeDetectorRef,
+    private eRef: ElementRef
   ) {
     this.authService.loadToken();
   }
@@ -63,6 +67,29 @@ export class LayoutComponent {
         this.cdr.detectChanges();
       });
   }
+
+  // Detect clicks anywhere on the page
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    // If click target is outside the left-section (menu + toggle button)
+    if (
+      !this.eRef.nativeElement
+        .querySelector('.left-section')
+        ?.contains(event.target)
+    ) {
+      this.isMenuOpen = false;
+    }
+    if (
+      !this.eRef.nativeElement
+        .querySelector('.search-wrapper')
+        ?.contains(event.target)
+    ) {
+      this.issearchFocused = false;
+    } else {
+      this.issearchFocused = true;
+    }
+  }
+
   navigateToProduct(productId: number) {
     this.router.navigate(['/product', productId]);
     this.searchControl.setValue(null);

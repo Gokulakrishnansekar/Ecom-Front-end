@@ -3,15 +3,23 @@ import { BehaviorSubject, delay, Subscription } from 'rxjs';
 import { ProductService } from 'src/app/core/services/product.service';
 import { productModel } from 'src/app/model/product.model';
 import { RouterLink } from '@angular/router';
-import { NgFor, AsyncPipe } from '@angular/common';
+import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
 import { LayoutComponent } from '../../layout/layout/layout.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   standalone: true,
-  imports: [LayoutComponent, NgFor, RouterLink, AsyncPipe],
+  imports: [
+    LayoutComponent,
+    NgFor,
+    RouterLink,
+    AsyncPipe,
+    CommonModule,
+    MatButtonModule,
+  ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   showLoader = false;

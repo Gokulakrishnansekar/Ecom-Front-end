@@ -1,1 +1,12 @@
+.cart-details {
+  @apply flex flex-row m-10 gap-4 h-80;
+}
 
+@media (max-width: 768px) {
+  .cart-details {
+    @apply flex flex-col;
+  }
+  img {
+    max-width: 100%;
+  }
+}

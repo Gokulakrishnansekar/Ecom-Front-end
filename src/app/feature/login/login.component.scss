@@ -46,3 +46,20 @@
     transition: opacity 0s, 0s transform 0s;
   }
 }
+
+@media (max-width: 480px) {
+  .login-card {
+    max-width: 90%;
+  }
+  .font-bold.text-xl {
+    font-size: 1.2rem;
+  }
+  input {
+    font-size: 1rem;
+    padding: 10px 8px;
+  }
+  .btn {
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+}

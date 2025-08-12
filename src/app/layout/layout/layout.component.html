@@ -1,72 +1,74 @@
 <div>
-  <div class="flex p-4 justify-between bg-gray-300">
-    <div class="flex items-center font-semibold gap-4">
-      <div
-        routerLink="/home"
-        routerLinkActive="active-link"
-        class="cursor-pointer"
-      >
-        Home
-      </div>
-      <div
-        *ngIf="authService.isSeller$ | async"
-        routerLink="/addproduct"
-        routerLinkActive="active-link"
-        class="cursor-pointer"
-      >
-        Add product
-      </div>
-      <div
-        *ngIf="authService.isAdmin$ | async"
-        class="cursor-pointer"
-        routerLinkActive="active-link"
-        routerLink="/user-details"
-      >
-        Manage Users
+  <div class="navbar">
+    <div class="left-section">
+      <button class="menu-toggle" (click)="isMenuOpen = !isMenuOpen">
+        <mat-icon class="menu-icon" [ngClass]="{ open: isMenuOpen }">
+          {{ isMenuOpen ? "close" : "menu" }}
+        </mat-icon>
+      </button>
+
+      <div class="nav-links" [ngClass]="{ open: isMenuOpen }">
+        <div
+          routerLink="/home"
+          routerLinkActive="active-link"
+          class="cursor-pointer"
+        >
+          Home
+        </div>
+        <div
+          *ngIf="authService.isSeller$ | async"
+          routerLink="/addproduct"
+          routerLinkActive="active-link"
+          class="cursor-pointer"
+        >
+          Add product
+        </div>
+        <div
+          *ngIf="authService.isAdmin$ | async"
+          class="cursor-pointer"
+          routerLinkActive="active-link"
+          routerLink="/user-details"
+        >
+          Manage Users
+        </div>
       </div>
     </div>
-    <div class="flex gap-4 items-center">
-      <div class="cursor-pointer font-semibold">cart</div>
 
-      <div
-        class="relative wrapper"
-        tabindex="0"
-        (focusout)="isseachFocused = false"
-        (focusin)="isseachFocused = true"
-      >
+    <div class="right-section">
+      <div class="cursor-pointer font-semibold">Cart</div>
+
+      <!-- Search -->
+      <div class="relative wrapper search-wrapper" tabindex="0">
         <input
           type="text"
           placeholder="search product"
           [formControl]="searchControl"
-          class="border-2 border-gray-300 p-1 rounded-lg"
+          class="border-2 border-gray-300 p-1 rounded-lg max-w-[inherit]"
         />
-
         <div
-          *ngIf="searchControl.value && isseachFocused"
-          class="absolute top-10 bg-white border-2 rounded-lg w-48"
-          style="z-index: 1000"
+          *ngIf="searchControl.value && issearchFocused"
+          class="search-results"
         >
           <ng-container *ngIf="(searchedData$ | async).length">
             <div
               *ngFor="let data of searchedData$ | async"
-              class="p-1 cursor-pointer hover:bg-gray-100 flex gap-1"
+              class="search-item"
               (mousedown)="navigateToProduct(data.id)"
             >
               <img
                 [src]="'data:image/jpeg;base64,' + data.imageData"
-                class="max-w-10 max-h-10 rounded-lg"
+                class="search-img"
               />
-
               {{ data.name }}
             </div>
           </ng-container>
-
           <div *ngIf="!(searchedData$ | async).length" class="p-1 border-b-2">
-            no data found {{ searchedData$ | async }}
+            no data found
           </div>
         </div>
       </div>
-      <div>{{ authService.name$ | async }}</div>
+
+      <!-- Profile -->
       <div
         class="relative wrapper"
         tabindex="0"
@@ -76,33 +78,26 @@
           alt="profile"
           class="max-w-8 max-h-8 rounded-lg hover:cursor-pointer"
           (click)="isProfileClicked = !isProfileClicked; cdr.detectChanges()"
-          >account_circle</mat-icon
         >
-        <div
-          *ngIf="isProfileClicked"
-          class="absolute top-10 bg-white border-2 rounded-lg -left-20"
-          style="z-index: 1000"
-        >
-          <div
-            class="p-2 cursor-pointer hover:bg-gray-100 flex gap-1"
-            (click)="changePassword()"
-          >
-            change password
+          account_circle
+        </mat-icon>
+        <div *ngIf="isProfileClicked" class="profile-dropdown">
+          <div class="profile-item">{{ authService.name$ | async }}</div>
+          <div class="profile-item" (click)="changePassword()">
+            Change password
           </div>
-          <div
-            class="p-2 cursor-pointer hover:bg-gray-100 flex gap-1"
-            (click)="logout()"
-          >
-            Logout
-          </div>
+          <div class="profile-item" (click)="logout()">Logout</div>
         </div>
       </div>
     </div>
   </div>
+
   <div>
     <ng-content></ng-content>
   </div>
 </div>
+
+<!-- Loader -->
 <div class="backdrop" [ngClass]="{ show: showLoader }">
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
