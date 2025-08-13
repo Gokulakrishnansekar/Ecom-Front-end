@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
 import { LayoutComponent } from '../../layout/layout/layout.component';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   showLoader = false;
   products$ = new BehaviorSubject<productModel[]>([]);
   supscription: Subscription;
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    public authService: AuthService
+  ) {}
   ngOnDestroy(): void {
     this.supscription.unsubscribe();
   }

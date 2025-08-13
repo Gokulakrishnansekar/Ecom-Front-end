@@ -2,6 +2,10 @@
   @apply flex flex-row m-10 gap-4 h-80;
 }
 
+.button-module {
+  display: flex;
+  gap: 1rem;
+}
 @media (max-width: 768px) {
   .cart-details {
     @apply flex flex-col;

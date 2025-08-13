@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { CATOGORY } from 'src/app/constants/catogory';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
@@ -48,7 +49,8 @@ export class AddProductComponent implements OnInit {
     private aroute: ActivatedRoute,
     private location: Location,
     private fb: FormBuilder,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +84,8 @@ export class AddProductComponent implements OnInit {
   }
   addProduct(): void {
     this.showLoader = true;
+
+    console.log(this.productForm);
     this.pservice
       .saveProduct(this.productForm.value, this.productImage)
       .subscribe({
@@ -92,6 +96,7 @@ export class AddProductComponent implements OnInit {
           this.location.back();
         },
         error: (e) => {
+          this.showLoader = false;
           this.notificationService.openSnackBar(e.error.message);
         },
       });

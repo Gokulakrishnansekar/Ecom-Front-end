@@ -1,4 +1,4 @@
-<app-layout>
+<app-layout [showLoader]="showLoader">
   <div class="flex justify-center items-center">
     <div class="cart-details" *ngIf="product$ | async as product">
       <img
@@ -15,7 +15,11 @@
         <div>Release date : {{ product.release_date | date }}</div>
         <div
           class="flex justify-center gap-4"
-          *ngIf="authService.isSeller$ | async"
+          *ngIf="
+            (authService.isSeller$ | async) &&
+              product.createdBy?.id === (authService.userId$ | async);
+            else buyProductButton
+          "
         >
           <button class="btn" (click)="updateProduct(product.id)">
             update
@@ -24,6 +28,26 @@
             delete
           </button>
         </div>
+        <ng-template #buyProductButton>
+          <div class="button-module">
+            <button
+              *ngIf="product?.is_available"
+              mat-raised-button
+              color="primary"
+              (click)="buyProduct()"
+            >
+              Buy product
+            </button>
+            <button
+              *ngIf="product.id"
+              mat-raised-button
+              color="primary"
+              (click)="buyProduct()"
+            >
+              Add to cart
+            </button>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>

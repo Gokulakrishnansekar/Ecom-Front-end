@@ -10,4 +10,5 @@ export class AuthUserModel {
   }
   sub: string;
   roles: string;
+  user_id: number;
 }

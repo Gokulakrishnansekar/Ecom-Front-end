@@ -12,6 +12,7 @@ import { NotificationService } from 'src/app/shared/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
 import { DeleteUserConfirmationComponent } from './delete-user-confirmation/delete-user-confirmation.component';
+import { AuthService } from 'src/app/core/services/auth.service';
 @Component({
   selector: 'app-add-user',
   standalone: true,
@@ -28,18 +29,22 @@ import { DeleteUserConfirmationComponent } from './delete-user-confirmation/dele
   styleUrls: ['./user-details.component.scss'],
 })
 export class UserDetailComponent implements OnInit {
+  showLoader = false;
   dataSource: UsersModel[] = [];
   constructor(
     private userService: UserService,
     private notificationService: NotificationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public authService: AuthService
   ) {}
   ngOnInit(): void {
     this.getUserdetails();
   }
 
   getUserdetails() {
+    this.showLoader = true;
     this.userService.getUsers().subscribe((value: UsersModel[]) => {
+      this.showLoader = false;
       this.dataSource = value;
     });
   }

@@ -18,6 +18,8 @@ export class AuthService {
   isBuyer$ = new BehaviorSubject<boolean>(false);
   isSeller$ = new BehaviorSubject<boolean>(false);
   name$ = new BehaviorSubject<string>('');
+  isExpired$ = new BehaviorSubject<boolean>(false);
+  userId$ = new BehaviorSubject<number>(null);
 
   loadToken() {
     const token = localStorage.getItem('token') as string;
@@ -25,11 +27,14 @@ export class AuthService {
       const userdetails = jwtHelper.decodeToken(
         JSON.parse(token)
       ) as AuthUserModel;
+      console.log(jwtHelper.isTokenExpired(token));
+      console.log('User Details:', userdetails);
 
       this.isAdmin$.next(userdetails.roles.includes(Roles.ADMIN));
       this.isBuyer$.next(userdetails.roles.includes(Roles.BUYER));
       this.isSeller$.next(userdetails.roles.includes(Roles.SELLER));
       this.name$.next(userdetails.sub);
+      this.userId$.next(userdetails.user_id);
     }
   }
 

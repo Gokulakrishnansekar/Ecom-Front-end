@@ -21,6 +21,7 @@
         <button
           class="btn"
           *ngIf="item.is_available"
+          [disabled]="(authService.userId$ | async) === item.createdBy.id"
           (click)="addTocard($event)"
         >
           add to cart

@@ -12,6 +12,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { HttpHeader } from './model/auth.model';
 import { Route, Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/notification.service';
+import { jwtHelper } from '../guard/auth.guard';
 
 @Injectable()
 export class AuthinterceptorInterceptor implements HttpInterceptor {
@@ -28,9 +29,13 @@ export class AuthinterceptorInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
     let token: string = localStorage.getItem('token') as string;
-    token = token ? JSON.parse(token) : '';
 
-    const clone = request.clone({
+    token = token ? JSON.parse(token) : '';
+    if (token && jwtHelper.isTokenExpired(token)) {
+      localStorage.clear();
+      this.route.navigate(['/login']);
+    }
+    let clone = request.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
       },

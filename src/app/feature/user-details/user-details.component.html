@@ -1,4 +1,4 @@
-<app-layout>
+<app-layout [showLoader]="showLoader">
   <div style="margin-top: 3rem; padding: 1rem">
     <button
       class="addUser"
@@ -25,7 +25,10 @@
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef>Action</th>
           <td mat-cell *matCellDef="let element">
-            <button (click)="deleteConfirmation(element)">
+            <button
+              *ngIf="(authService.userId$ | async) !== element.id"
+              (click)="deleteConfirmation(element)"
+            >
               <mat-icon
                 aria-hidden="false"
                 aria-label="Delete user"

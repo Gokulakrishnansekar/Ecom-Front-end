@@ -1,4 +1,5 @@
 import { FormControl, Validators } from '@angular/forms';
+import { UsersModel } from './users.model';
 
 export class productModel {
   id: number;
@@ -11,6 +12,7 @@ export class productModel {
   in_stock: number;
   release_date: string;
   imageData: string;
+  createdBy: UsersModel;
   constructor(params?: productModel) {
     if (params) {
       Object.assign(this, params);
@@ -51,6 +53,7 @@ export class ProductForm {
     public imageData = new FormControl<string>(
       model.imageData,
       Validators.required
-    )
+    ),
+    public createdBy = new FormControl<UsersModel>(model.createdBy)
   ) {}
 }

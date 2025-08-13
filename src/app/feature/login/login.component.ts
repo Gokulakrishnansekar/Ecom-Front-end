@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
   unAuthorized$ = new BehaviorSubject<string>('');
 
   ngOnInit(): void {
+    localStorage.removeItem('token');
     this.userForm = this.fb.group(new userForm(new LoginModel()));
   }
 
