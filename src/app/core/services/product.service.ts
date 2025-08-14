@@ -50,7 +50,7 @@ export class ProductService {
     );
   }
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url.apiUrl}/api//product/${id}`);
+    return this.http.delete<void>(`${this.url.apiUrl}/api/product/${id}`);
   }
 
   searchProduct(key: string | null) {

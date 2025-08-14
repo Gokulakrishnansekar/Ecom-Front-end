@@ -44,5 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   addTocard(event: any): void {
     event.stopPropagation();
+    window.alert('needs to be implemented');
   }
 }

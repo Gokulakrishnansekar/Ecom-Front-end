@@ -94,6 +94,12 @@
         &:hover {
           background: #f3f4f6;
         }
+        &_name {
+          font-weight: 600;
+          &:hover {
+            cursor: not-allowed;
+          }
+        }
       }
     }
   }

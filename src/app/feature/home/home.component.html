@@ -5,6 +5,9 @@
       class="flex flex-col p-5 m-4 rounded-md cursor-pointer hover:bg-gray-200 card bg-gray-100"
       [routerLink]="['/product', item.id]"
     >
+      <ng-container *ngIf="(authService.userId$ | async) === item.createdBy.id">
+        <span class="text-xs text-blue-600 font-semibold">My Product</span>
+      </ng-container>
       <img
         class="img m-auto"
         [src]="'data:image/jpeg;base64,' + item.imageData"
@@ -20,16 +23,38 @@
 
         <button
           class="btn"
-          *ngIf="item.is_available"
-          [disabled]="(authService.userId$ | async) === item.createdBy.id"
+          *ngIf="
+            item.is_available &&
+            (authService.userId$ | async) !== item.createdBy.id
+          "
           (click)="addTocard($event)"
         >
           add to cart
         </button>
 
-        <button mat-raised-button *ngIf="!item.is_available" disabled>
-          out of stock
+        <button
+          class="btn"
+          *ngIf="
+            (authService.userId$ | async) === item.createdBy.id;
+            else oosTemplate
+          "
+          routerLink="/addproduct/{{ item.id }}"
+        >
+          Edit Product Details
         </button>
+
+        <ng-template #oosTemplate>
+          <button
+            mat-raised-button
+            *ngIf="
+              !item.is_available &&
+              (authService.userId$ | async) !== item.createdBy.id
+            "
+            disabled
+          >
+            out of stock
+          </button>
+        </ng-template>
       </div>
     </div>
   </div>

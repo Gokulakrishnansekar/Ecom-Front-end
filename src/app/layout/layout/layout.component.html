@@ -35,7 +35,7 @@
     </div>
 
     <div class="right-section">
-      <div class="cursor-pointer font-semibold">Cart</div>
+      <!-- <div class="cursor-pointer font-semibold">Cart</div> -->
 
       <!-- Search -->
       <div class="relative wrapper search-wrapper" tabindex="0">
@@ -82,7 +82,9 @@
           account_circle
         </mat-icon>
         <div *ngIf="isProfileClicked" class="profile-dropdown">
-          <div class="profile-item">{{ authService.name$ | async }}</div>
+          <div class="profile-item profile-item_name">
+            {{ authService.name$ | async }}
+          </div>
           <div class="profile-item" (click)="changePassword()">
             Change password
           </div>
