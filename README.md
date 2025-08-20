@@ -22,7 +22,7 @@ The project aims to provide a scalable and secure online shopping platform. The 
 ## Technology Stack
 - Frontend: Angular
 - Backend: Spring Boot
-- Database: (Specify your database here, e.g., MySQL, PostgreSQL, MongoDB)
+- Database:PostgreSQL
 - Security: JWT (JSON Web Tokens) for authentication and authorization
 
 ---
