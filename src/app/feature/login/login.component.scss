@@ -4,10 +4,12 @@
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 2px 5px rgb(230, 221, 221);
+  // box-shadow: 2px 2px 5px rgb(230, 221, 221);
   padding: 2rem;
   // height: 500px;
   width: 400px;
+  margin-right: 5rem;
+  background-color: rgba(255, 255, 255, 0.63);
 }
 
 .seperator {
@@ -50,6 +52,8 @@
 @media (max-width: 480px) {
   .login-card {
     max-width: 90%;
+    justify-content: center;
+    margin: auto;
   }
   .font-bold.text-xl {
     font-size: 1.2rem;
@@ -62,4 +66,8 @@
     font-size: 1rem;
     padding: 12px 0;
   }
+}
+
+.bg-image {
+  background: url(../../../assets/bg.jpg) no-repeat center center/cover;
 }

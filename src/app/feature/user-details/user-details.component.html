@@ -9,7 +9,12 @@
       Add User
     </button>
     <div class="table-container">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8"
+        style="background-color: #ffffff29"
+      >
         <ng-container matColumnDef="Name">
           <th mat-header-cell *matHeaderCellDef>User Name</th>
           <td mat-cell *matCellDef="let element">{{ element.username }}</td>
